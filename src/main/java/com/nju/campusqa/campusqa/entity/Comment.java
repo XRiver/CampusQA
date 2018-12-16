@@ -15,8 +15,11 @@ public class Comment {
     @Id
     private String commentId;
 
-    @Field
+    // 作为response兼容使用，不是数据库字段
     private User user;
+
+    @Field
+    private User userId;
 
     @Field
     private Integer problemId;
@@ -47,6 +50,14 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     public Integer getProblemId() {

@@ -24,8 +24,11 @@ public class Answer {
     @Field
     private Integer problemId;
 
+    // 作为response兼容使用，不是数据库字段
+    private User user;
+
     @Field
-    private User user; // 作者
+    private User userId;
 
     @Field
     private List<String> staredBy; // 用户微信号的列表
@@ -71,6 +74,14 @@ public class Answer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     public List<String> getStaredBy() {
