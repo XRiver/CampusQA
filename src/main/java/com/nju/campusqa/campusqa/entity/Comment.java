@@ -1,31 +1,52 @@
 package com.nju.campusqa.campusqa.entity;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
 /**
  * Created by xiongzehua on 2018/12/15.
  */
+@Document
 public class Comment {
-    private String id;
+    @Id
+    private String commentId;
 
+    @Field
+    private User user;
+
+    @Field
     private Integer problemId;
 
+    @Field
     private Integer answerId;
 
+    @Field
     private String content;
 
+    @Field
     private Integer anonymous; // 0:正常 1:匿名
 
+    @Field
     private LocalDateTime createTime;
 
-    public String getId() {
-        return id;
+    public String getCommentId() {
+        return commentId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getProblemId() {

@@ -1,32 +1,44 @@
 package com.nju.campusqa.campusqa.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * Created by xiongzehua on 2018/12/15.
  */
+@Document
 public class Answer {
-    private String id;
+    @Id
+    private String answerId;
 
+    @Field
     private String content;
 
+    @Field
     private Integer anonymous; // 0:正常 1:匿名
 
+    @Field
     private Integer problemId;
 
-    private String userId; // 作者
+    @Field
+    private User user; // 作者
 
+    @Field
     private List<String> staredBy; // 用户微信号的列表
 
+    @Field
     private LocalDateTime createTime;
 
-    public String getId() {
-        return id;
+    public String getAnswerId() {
+        return answerId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAnswerId(String answerId) {
+        this.answerId = answerId;
     }
 
     public String getContent() {
@@ -53,12 +65,12 @@ public class Answer {
         this.problemId = problemId;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<String> getStaredBy() {
