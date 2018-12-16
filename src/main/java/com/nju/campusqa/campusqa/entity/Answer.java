@@ -1,5 +1,6 @@
 package com.nju.campusqa.campusqa.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -33,6 +34,7 @@ public class Answer {
     @Field
     private List<String> staredBy; // 用户微信号的列表
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Field
     private LocalDateTime createTime;
 

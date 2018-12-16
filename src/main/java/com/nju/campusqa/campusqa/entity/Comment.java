@@ -1,5 +1,6 @@
 package com.nju.campusqa.campusqa.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,6 +34,7 @@ public class Comment {
     @Field
     private Integer anonymous; // 0:正常 1:匿名
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Field
     private LocalDateTime createTime;
 
