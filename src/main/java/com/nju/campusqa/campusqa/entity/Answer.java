@@ -22,13 +22,13 @@ public class Answer {
     private Integer anonymous; // 0:正常 1:匿名
 
     @Field
-    private Integer problemId;
+    private String problemId;
 
     // 作为response兼容使用，不是数据库字段
     private User user;
 
     @Field
-    private User userId;
+    private String userId;
 
     @Field
     private List<String> staredBy; // 用户微信号的列表
@@ -60,11 +60,11 @@ public class Answer {
         this.anonymous = anonymous;
     }
 
-    public Integer getProblemId() {
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(Integer problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 
@@ -76,11 +76,11 @@ public class Answer {
         this.user = user;
     }
 
-    public User getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
