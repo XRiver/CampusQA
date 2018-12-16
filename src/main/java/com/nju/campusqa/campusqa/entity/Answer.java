@@ -7,7 +7,7 @@ import java.util.List;
  * Created by xiongzehua on 2018/12/15.
  */
 public class Answer {
-    private Integer id;
+    private String id;
 
     private String content;
 
@@ -21,11 +21,11 @@ public class Answer {
 
     private LocalDateTime createTime;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * Created by xiongzehua on 2018/12/15.
  */
 public class Comment {
-    private Integer id;
+    private String id;
 
     private Integer problemId;
 
@@ -20,11 +20,11 @@ public class Comment {
 
     private LocalDateTime createTime;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
