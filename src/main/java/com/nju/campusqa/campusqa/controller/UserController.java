@@ -37,7 +37,8 @@ public class UserController {
 
     @RequestMapping("/api/hello")
     @ResponseBody
-    public String hello() {
-        return "aaaa";
+    public Response hello() {
+        System.out.println("into hello");
+        return Response.createBySuccess(null);
     }
 }
