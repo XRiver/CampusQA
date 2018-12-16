@@ -34,7 +34,7 @@ public class User {
     private Integer role;
 
     @Field
-    private LocalDateTime dateTime;
+    private LocalDateTime ban;
 
     public String getId() {
         return id;
@@ -92,11 +92,11 @@ public class User {
         this.role = role;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getBan() {
+        return ban;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setBan(LocalDateTime ban) {
+        this.ban = ban;
     }
 }
