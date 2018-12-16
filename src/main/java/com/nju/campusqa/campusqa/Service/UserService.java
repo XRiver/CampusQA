@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.time.LocalDateTime;
 
 /**
@@ -18,17 +19,9 @@ public class UserService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public User signUp(String openId) {
-        User user = new User();
-        user.setOpenId(openId);
-        user.setDateTime(LocalDateTime.now());
-        Criteria criteria = Criteria.where("openId").is(openId);
-        Query query = Query.query(criteria);
-        User ret = mongoTemplate.findOne(query, User.class);
-        if (ret == null)
-            return mongoTemplate.save(user,"user");
-        else
-            return  ret;
-
+    public User findOne(String userId) {
+        Query q = Query.query(Criteria.where("id").is(userId));
+        return mongoTemplate.findOne(q, User.class);
     }
+
 }

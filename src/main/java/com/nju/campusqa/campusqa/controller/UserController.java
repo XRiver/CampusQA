@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -44,7 +45,9 @@ public class UserController {
                 nickName = (String)params.get(NICKNAME_COL);
 
         RestTemplate restTemplate = new RestTemplate();
-        String str =  restTemplate.getForObject("https://api.weixin.qq.com/sns/jscode2session?appid=wx8271f84618387e52&secret=31cb337d5e72dc4c1eb3194a1e6caef4&js_code={code}&grant_type=authorization_code", String.class, code);
+        String str =  restTemplate.getForObject("https://api.weixin.qq.com/sns/jscode2session?appid=wx8271f" +
+                "84618387e52&secret=31cb337d5e72dc4c1eb3194a1e6caef4&js_code={code}&grant_type=authorizatio" +
+                "n_code", String.class, code);
         String[] strs = str.split("\"openid\":\"");
         String openId = strs[1].replace("\"}", "");
 
@@ -53,14 +56,20 @@ public class UserController {
         User queryRet = mongoTemplate.findOne(query, User.class);
 
         if (queryRet == null){ // Create new user
+
             User newUser = new User();
             newUser.setOpenId(openId);
-            newUser.setDateTime(LocalDateTime.now());
             newUser.setAvatarUrl(avatarUrl);
             newUser.setNickName(nickName);
+            newUser.setFollowProblem(new ArrayList<String>());
+            newUser.setFollowUser(new ArrayList<String>());
+            newUser.setRole(0);
+            newUser.setBan(null);
 
             queryRet =  mongoTemplate.save(newUser,"user");
+
         } else { // Update nickName and avatarUrl
+
             Criteria critUpdate = Criteria.where("id").is(queryRet.getId());
             Query queryUpdate = Query.query(critUpdate);
             Update update = Update.update(AVATAR_COL,avatarUrl);
@@ -68,6 +77,7 @@ public class UserController {
 
             UpdateResult updateRet = mongoTemplate.updateFirst(query,update,User.class);
             queryRet = mongoTemplate.findOne(query, User.class); // Re-query the User object.
+
         }
 
         return Response.createBySuccess(queryRet);
