@@ -19,13 +19,13 @@ public class Comment {
     private User user;
 
     @Field
-    private User userId;
+    private String userId;
 
     @Field
-    private Integer problemId;
+    private String problemId;
 
     @Field
-    private Integer answerId;
+    private String answerId;
 
     @Field
     private String content;
@@ -52,27 +52,27 @@ public class Comment {
         this.user = user;
     }
 
-    public User getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public Integer getProblemId() {
+    public String getProblemId() {
         return problemId;
     }
 
-    public void setProblemId(Integer problemId) {
+    public void setProblemId(String problemId) {
         this.problemId = problemId;
     }
 
-    public Integer getAnswerId() {
+    public String getAnswerId() {
         return answerId;
     }
 
-    public void setAnswerId(Integer answerId) {
+    public void setAnswerId(String answerId) {
         this.answerId = answerId;
     }
 

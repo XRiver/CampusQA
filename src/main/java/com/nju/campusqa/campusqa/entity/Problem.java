@@ -24,7 +24,7 @@ public class Problem {
     private User user;
 
     @Field
-    private User userId;
+    private String userId;
 
     @Field
     private Integer status; // 0:关闭 1:正常
@@ -67,11 +67,11 @@ public class Problem {
         this.user = user;
     }
 
-    public User getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(User userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
