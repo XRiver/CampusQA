@@ -96,6 +96,7 @@ public class AnswerController {
         List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("problemId").is(problemId)), Answer.class);
         ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
         for (Answer a : answers) {
+            //TODO Answer要加上用户！使用AnswerService吧
             List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
             ret.add(new AnswerCommentListTuple(a, comments));
         }
@@ -109,15 +110,13 @@ public class AnswerController {
         String userId = (String) params.get("userId");
 
         User user = userService.findOne(userId);
-        if (user == null || (user.getBan() != null && user.getBan().isAfter(LocalDateTime.now()))) {
-            return Response.createByBan(null);
-        }
 
         List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("userId").is(userId)), Answer.class);
         ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
         for (Answer a : answers) {
+            a.setUser(user);
             List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
-            ret.add(new AnswerCommentListTuple(a, comments));
+            ret.add(new AnswerCommentListTuple(a, comments)); //TODO 此处comment应该加上user信息，应当由CommentService处理
         }
 
         return Response.createBySuccess(ret);
@@ -176,4 +175,5 @@ public class AnswerController {
         return Response.createBySuccess(null);
     }
 
+    //TODO 获取最新动态--一堆Answer
 }
