@@ -31,12 +31,12 @@ public class CampusqaApplicationTests {
         mongoTemplate.save(user,"user");
 
         List<User> retrieved = mongoTemplate.findAll(User.class);
-        retrieved.forEach(user1 -> {System.out.println(user1.getId());});
+        retrieved.forEach(user1 -> {System.out.println(user1.getUserId());});
     }
 
     @Test
     public void testUserService() {
-        Assert.assertEquals(userService.findOne("5c164bc65b1c7223540c3979").getId(), "5c164bc65b1c7223540c3979");
+        Assert.assertEquals(userService.findOne("5c164bc65b1c7223540c3979").getUserId(), "5c164bc65b1c7223540c3979");
         Assert.assertEquals(userService.findOne("111123123123"), null);
 
     }

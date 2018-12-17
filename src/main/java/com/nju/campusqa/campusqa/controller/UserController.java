@@ -2,6 +2,7 @@ package com.nju.campusqa.campusqa.controller;
 
 import com.mongodb.client.result.UpdateResult;
 import com.nju.campusqa.campusqa.Service.UserService;
+import com.nju.campusqa.campusqa.entity.Problem;
 import com.nju.campusqa.campusqa.entity.User;
 import com.nju.campusqa.campusqa.vo.Response;
 import com.nju.campusqa.campusqa.vo.SignUp;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,7 +70,7 @@ public class UserController {
 
         } else { // Update nickName and avatarUrl
 
-            Criteria critUpdate = Criteria.where("id").is(queryRet.getId());
+            Criteria critUpdate = Criteria.where("userId").is(queryRet.getUserId());
             Query queryUpdate = Query.query(critUpdate);
             Update update = Update.update(AVATAR_COL, avatarUrl);
             update.set(NICKNAME_COL, nickName);
@@ -108,10 +110,58 @@ public class UserController {
     // 之前api忘了加这一条了
 
 
-    //TODO 关注用户API
+    // TODO 关注用户API
+    @PostMapping("/api/user/follow")
+    @ResponseBody
+    public Response follow(@RequestBody Map<String, Object> params) {
+        System.out.println("into /api/user/follow");
 
+        String userId = (String) params.get("userId");
+        String targetId = (String) params.get("targetId");
 
-    //TODO 取关用户API
+        User user = userService.findOne(userId);
+        if (user == null)
+            return Response.createByIllegalArgument(null);
+        if (userService.findOne(targetId) == null)
+            return Response.createByIllegalArgument(null);
+
+        List followList = user.getFollowUser();
+        followList.add(targetId);
+
+        Criteria criteria = Criteria.where("id").is(userId);
+        Query query = Query.query(criteria);
+        Update update = Update.update("followUser", followList);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
+
+        return Response.createBySuccess(null);
+    }
+
+    // TODO 取关用户API
+    @PostMapping("/api/user/unfollow")
+    @ResponseBody
+    public Response unfollow(@RequestBody Map<String, Object> params) {
+        System.out.println("into /api/user/unfollow");
+
+        String userId = (String) params.get("userId");
+        String targetId = (String) params.get("targetId");
+
+        User user = userService.findOne(userId);
+        if (user == null)
+            return Response.createByIllegalArgument(null);
+        if (userService.findOne(targetId) == null)
+            return Response.createByIllegalArgument(null);
+
+        List followList = user.getFollowUser();
+        followList.remove(targetId);
+
+        Criteria criteria = Criteria.where("id").is(userId);
+        Query query = Query.query(criteria);
+        Update update = Update.update("followUser", followList);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
+
+        return Response.createBySuccess(null);
+    }
+
     //TODO 我的关注列表API
 
 }

@@ -34,7 +34,7 @@ public class Answer {
     @Field
     private List<String> staredBy; // 用户微信号的列表
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Field
     private LocalDateTime createTime;
 

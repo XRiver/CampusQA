@@ -14,7 +14,7 @@ import java.util.List;
 @Document
 public class User {
     @Id
-    private String id;
+    private String userId;
 
     @Field
     private String openId;
@@ -35,15 +35,15 @@ public class User {
     private Integer role;
 
     @Field
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ban;
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getOpenId() {

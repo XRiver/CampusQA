@@ -96,7 +96,10 @@ public class AnswerController {
         List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("problemId").is(problemId)), Answer.class);
         ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
         for (Answer a : answers) {
-            //TODO Answer要加上用户！使用AnswerService吧
+            // DONE Answer要加上用户！使用AnswerService吧
+            User user = userService.findOne(a.getUserId());
+            a.setUser(user);
+
             List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
             ret.add(new AnswerCommentListTuple(a, comments));
         }
