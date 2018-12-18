@@ -89,7 +89,8 @@ public class ProblemController {
             return Response.createByIllegalArgument(null);
 
         List followList = user.getFollowProblem();
-        followList.add(problem.getProblemId());
+        if (!followList.contains(problem.getProblemId()))
+            followList.add(problem.getProblemId());
 
 
         Criteria criteria = Criteria.where("userId").is(problem.getUserId());
@@ -110,7 +111,8 @@ public class ProblemController {
             return Response.createByIllegalArgument(null);
 
         List followList = user.getFollowProblem();
-        followList.remove(problem.getProblemId());
+        if (followList.contains(problem.getProblemId()))
+            followList.remove(problem.getProblemId());
 
         Criteria criteria = Criteria.where("userId").is(problem.getUserId());
         Query query = Query.query(criteria);

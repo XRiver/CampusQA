@@ -104,7 +104,11 @@ public class AnswerController {
             a.setUser(user);
 
             List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
-            ret.add(new AnswerCommentListTuple(a, comments)); //TODO 每个Comment加上User，使用CommentService？
+            for (Comment c : comments) {
+                User u = userService.findOne(c.getUserId());
+                c.setUser(u);
+            }
+            ret.add(new AnswerCommentListTuple(a, comments)); //TODO  DONE 每个Comment加上User，使用CommentService？
         }
 
         return Response.createBySuccess(ret);
@@ -122,7 +126,11 @@ public class AnswerController {
         for (Answer a : answers) {
             a.setUser(user);
             List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
-            ret.add(new AnswerCommentListTuple(a, comments)); //TODO 此处comment应该加上user信息，应当由CommentService处理
+            for (Comment c : comments) {
+                User u = userService.findOne(c.getUserId());
+                c.setUser(u);
+            }
+            ret.add(new AnswerCommentListTuple(a, comments)); //TODO DONE 此处comment应该加上user信息，应当由CommentService处理
         }
 
         return Response.createBySuccess(ret);

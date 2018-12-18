@@ -145,7 +145,8 @@ public class UserController {
             return Response.createByIllegalArgument(null);
 
         List followList = user.getFollowUser();
-        followList.add(targetId);
+        if (!followList.contains(targetId))
+            followList.add(targetId);
 
         Criteria criteria = Criteria.where("userId").is(userId);
         Query query = Query.query(criteria);
@@ -170,7 +171,8 @@ public class UserController {
             return Response.createByIllegalArgument(null);
 
         List followList = user.getFollowUser();
-        followList.remove(targetId);
+        if (followList.contains((targetId)))
+            followList.remove(targetId);
 
         Criteria criteria = Criteria.where("userId").is(userId);
         Query query = Query.query(criteria);
