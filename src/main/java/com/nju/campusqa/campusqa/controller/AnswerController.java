@@ -178,5 +178,23 @@ public class AnswerController {
         return Response.createBySuccess(null);
     }
 
-    //TODO 获取最新动态--一堆Answer
+    //TODO 获取最新动态--一堆Answer 逻辑待修改，先给前端测试使用
+    @ResponseBody
+    @GetMapping("/api/activity")
+    public Response<ArrayList<AnswerCommentListTuple>> activity(@RequestBody User u) {
+
+        List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("problemId").is("5c1665cd5b1c7241e8573d78")), Answer.class);
+        ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
+        for (Answer a : answers) {
+            // DONE Answer要加上用户！使用AnswerService吧
+            User user = userService.findOne(a.getUserId());
+            a.setUser(user);
+
+            List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
+            ret.add(new AnswerCommentListTuple(a, comments));
+        }
+
+        return Response.createBySuccess(ret);
+    }
+
 }

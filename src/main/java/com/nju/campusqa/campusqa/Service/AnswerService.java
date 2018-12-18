@@ -27,4 +27,9 @@ public class AnswerService {
         return null; //TODO
     }
 
+    public Answer findOne(String answerId) {
+        Query q = Query.query(Criteria.where("answerId").is(answerId));
+        return mongoTemplate.findOne(q, Answer.class);
+    }
+
 }
