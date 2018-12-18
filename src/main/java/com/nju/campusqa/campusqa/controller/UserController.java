@@ -90,12 +90,12 @@ public class UserController {
         String userId = (String) params.get("userId"),
                 password = (String) params.get("password");
 
-        if("888888".equals(password)) {
-            if(userService.findOne(userId) != null) {
+        if ("888888".equals(password)) {
+            if (userService.findOne(userId) != null) {
 
-                Criteria critUpdate = Criteria.where("id").is(userId);
+                Criteria critUpdate = Criteria.where("userId").is(userId);
                 Query queryUpdate = Query.query(critUpdate);
-                Update update = Update.update(ROLE_COL,1);
+                Update update = Update.update(ROLE_COL, 1);
 
                 UpdateResult updateRet = mongoTemplate.updateFirst(queryUpdate, update, User.class);
             }
@@ -106,11 +106,30 @@ public class UserController {
         }
     }
 
-    //TODO 禁言API
-    // 之前api忘了加这一条了
+    @ResponseBody
+    @PostMapping("/api/ban")
+    public Response<Object> ban(@RequestBody Map<String, Object> params) {
+
+        String adminId = (String) params.get("userId"),
+                targetId = (String) params.get("banId");
+        Integer duration = (Integer) params.get("duration");
+
+        User admin = userService.findOne(adminId);
+        User target = userService.findOne(targetId);
+
+        if(admin==null || target == null || admin.getRole() != 1) {
+            return Response.createByNeedAuthority(null);
+        }
+
+        Query q = Query.query(Criteria.where("userId").is(targetId));
+        Update update = Update.update("ban",LocalDateTime.now().plusDays(duration));
+        UpdateResult result = mongoTemplate.updateFirst(q,update,User.class);
 
 
-    // TODO 关注用户API
+        return Response.createBySuccess(null);
+    }
+
+
     @PostMapping("/api/user/follow")
     @ResponseBody
     public Response follow(@RequestBody Map<String, Object> params) {
@@ -128,7 +147,7 @@ public class UserController {
         List followList = user.getFollowUser();
         followList.add(targetId);
 
-        Criteria criteria = Criteria.where("id").is(userId);
+        Criteria criteria = Criteria.where("userId").is(userId);
         Query query = Query.query(criteria);
         Update update = Update.update("followUser", followList);
         UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
@@ -136,7 +155,6 @@ public class UserController {
         return Response.createBySuccess(null);
     }
 
-    // TODO 取关用户API
     @PostMapping("/api/user/unfollow")
     @ResponseBody
     public Response unfollow(@RequestBody Map<String, Object> params) {
@@ -154,7 +172,7 @@ public class UserController {
         List followList = user.getFollowUser();
         followList.remove(targetId);
 
-        Criteria criteria = Criteria.where("id").is(userId);
+        Criteria criteria = Criteria.where("userId").is(userId);
         Query query = Query.query(criteria);
         Update update = Update.update("followUser", followList);
         UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
@@ -162,6 +180,24 @@ public class UserController {
         return Response.createBySuccess(null);
     }
 
-    //TODO 我的关注列表API
+    @PostMapping("/api/user/myfollowlist")
+    @ResponseBody
+    public Response<List<User>> myFollowList(@RequestBody Map<String, Object> params) {
+        String userId = (String) params.get("userId");
+
+        User user = userService.findOne(userId);
+        if (user == null)
+            return Response.createByIllegalArgument(null);
+
+        List<String> followList = user.getFollowUser();
+        List<User> ret = new ArrayList<>();
+
+        for(String uid:followList){
+            ret.add(userService.findOne(uid));
+        }
+
+        return Response.createBySuccess(ret);
+    }
+
 
 }
