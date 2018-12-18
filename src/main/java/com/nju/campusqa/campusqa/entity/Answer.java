@@ -101,4 +101,15 @@ public class Answer {
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Answer) {
+            Answer other = (Answer) obj;
+            if (other.answerId != null && other.answerId.equals(answerId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

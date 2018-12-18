@@ -23,8 +23,21 @@ public class AnswerService {
     private UserService userService;
 
     public List<Answer> findByProblemId(String problemId) {
-        // Query q = Query.query(Criteria.where("id").is(userId));
-        return null; //TODO
+        Query q = Query.query(Criteria.where("problemId").is(problemId));
+        List<Answer> answers = mongoTemplate.find(q,Answer.class);
+        for(Answer a:answers){
+            a.setUser(userService.findOne(a.getUserId()));
+        }
+        return answers;
+    }
+
+    public List<Answer> findByUserId(String userId) {
+        Query q = Query.query(Criteria.where("userId").is(userId));
+        List<Answer> answers = mongoTemplate.find(q,Answer.class);
+        for(Answer a:answers){
+            a.setUser(userService.findOne(a.getUserId()));
+        }
+        return answers;
     }
 
 }
