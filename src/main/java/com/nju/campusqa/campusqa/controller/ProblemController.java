@@ -61,7 +61,6 @@ public class ProblemController {
             User user = userService.findOne(p.getUserId());
             p.setUser(user);
         }
-        System.out.println(list);
         return Response.createBySuccess(list);
     }
 
@@ -93,7 +92,7 @@ public class ProblemController {
         followList.add(problem.getProblemId());
 
 
-        Criteria criteria = Criteria.where("id").is(problem.getUserId());
+        Criteria criteria = Criteria.where("userId").is(problem.getUserId());
         Query query = Query.query(criteria);
         Update update = Update.update("followProblem", followList);
         UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
@@ -113,7 +112,7 @@ public class ProblemController {
         List followList = user.getFollowProblem();
         followList.remove(problem.getProblemId());
 
-        Criteria criteria = Criteria.where("id").is(problem.getUserId());
+        Criteria criteria = Criteria.where("userId").is(problem.getUserId());
         Query query = Query.query(criteria);
         Update update = Update.update("followProblem", followList);
         UpdateResult result = mongoTemplate.updateFirst(query, update, User.class);
@@ -142,7 +141,7 @@ public class ProblemController {
         return Response.createBySuccess(null);
     }
 
-    @PostMapping("/api/problem/delete")
+    @PostMapping("/xxx/api/problem/delete")
     @ResponseBody
     public Response delete(@RequestBody Problem param) {
         System.out.println("into /api/problem/delete");
@@ -154,7 +153,7 @@ public class ProblemController {
         if (userService.findOne(userId).getRole() == 0)
             return Response.createByNeedAuthority(null);
 
-        Criteria criteria = Criteria.where("id").is(problemId);
+        Criteria criteria = Criteria.where("problemId").is(problemId);
         Query query = Query.query(criteria);
         DeleteResult result = mongoTemplate.remove(query, Problem.class);
 
