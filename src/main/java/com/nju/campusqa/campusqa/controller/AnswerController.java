@@ -2,6 +2,7 @@ package com.nju.campusqa.campusqa.controller;
 
 import com.mongodb.client.result.UpdateResult;
 import com.nju.campusqa.campusqa.Service.AnswerService;
+import com.nju.campusqa.campusqa.Service.CommentService;
 import com.nju.campusqa.campusqa.Service.UserService;
 import com.nju.campusqa.campusqa.entity.Answer;
 import com.nju.campusqa.campusqa.entity.Comment;
@@ -32,6 +33,9 @@ public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -103,12 +107,8 @@ public class AnswerController {
             User user = userService.findOne(a.getUserId());
             a.setUser(user);
 
-            List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
-            for (Comment c : comments) {
-                User u = userService.findOne(c.getUserId());
-                c.setUser(u);
-            }
-            ret.add(new AnswerCommentListTuple(a, comments)); //TODO  DONE 每个Comment加上User，使用CommentService？
+            List<Comment> comments = commentService.findByAnswerId(a.getAnswerId());
+            ret.add(new AnswerCommentListTuple(a, comments));
         }
 
         return Response.createBySuccess(ret);
@@ -125,12 +125,8 @@ public class AnswerController {
         ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
         for (Answer a : answers) {
             a.setUser(user);
-            List<Comment> comments = mongoTemplate.find(Query.query(Criteria.where("answerId").is(a.getAnswerId())), Comment.class);
-            for (Comment c : comments) {
-                User u = userService.findOne(c.getUserId());
-                c.setUser(u);
-            }
-            ret.add(new AnswerCommentListTuple(a, comments)); //TODO DONE 此处comment应该加上user信息，应当由CommentService处理
+            List<Comment> comments = commentService.findByAnswerId(a.getAnswerId());
+            ret.add(new AnswerCommentListTuple(a, comments));
         }
 
         return Response.createBySuccess(ret);
@@ -194,7 +190,6 @@ public class AnswerController {
     public Response<List<AnswerCommentListTuple>> getActivity(@RequestBody Map<String, Object> params) {
         String userId = (String) params.get("userId");
 
-        ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
         User user = userService.findOne(userId);
 
         LinkedList<Answer> answers = new LinkedList<>();
@@ -215,9 +210,11 @@ public class AnswerController {
             a.setUser(userService.findOne(a.getUserId()));
         }
 
-        //TODO 使用CommentService为Answer添加Comment
+        ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
 
-
+        for(Answer a:answers) {
+            ret.add(new AnswerCommentListTuple(a,commentService.findByAnswerId(a.getAnswerId())));
+        }
         return Response.createBySuccess(ret);
     }
 }
