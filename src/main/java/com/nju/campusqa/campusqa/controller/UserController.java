@@ -1,6 +1,7 @@
 package com.nju.campusqa.campusqa.controller;
 
 import com.mongodb.client.result.UpdateResult;
+import com.nju.campusqa.campusqa.Service.ProblemService;
 import com.nju.campusqa.campusqa.Service.UserService;
 import com.nju.campusqa.campusqa.entity.Problem;
 import com.nju.campusqa.campusqa.entity.User;
@@ -32,6 +33,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProblemService problemService;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -182,9 +186,9 @@ public class UserController {
         return Response.createBySuccess(null);
     }
 
-    @PostMapping("/api/user/myfollowlist")
+    @PostMapping("/api/user/followUser")
     @ResponseBody
-    public Response<List<User>> myFollowList(@RequestBody Map<String, Object> params) {
+    public Response<List<User>> followUser(@RequestBody Map<String, Object> params) {
         String userId = (String) params.get("userId");
 
         User user = userService.findOne(userId);
@@ -201,5 +205,25 @@ public class UserController {
         return Response.createBySuccess(ret);
     }
 
+    @PostMapping("/api/user/followProblem")
+    @ResponseBody
+    public Response<List<Problem>> followProblem(@RequestBody Map<String, Object> params) {
+        String userId = (String) params.get("userId");
 
+        User user = userService.findOne(userId);
+        if (user == null)
+            return Response.createByIllegalArgument(null);
+
+        List<String> followList = user.getFollowProblem();
+        List<Problem> ret = new ArrayList<>();
+
+        for(String pid : followList){
+            Problem p = problemService.findOne(pid);
+            User u = userService.findOne(p.getUserId());
+            p.setUser(u);
+            ret.add(p);
+        }
+
+        return Response.createBySuccess(ret);
+    }
 }
