@@ -147,7 +147,7 @@ public class AnswerController {
         Answer answer = answers.get(0);
         if (answer.getUserId().equals(userId) || user.getRole() == 1) { // Belong to the user or user is admin
             mongoTemplate.remove(Query.query(Criteria.where("answerId").is(answerId)), Comment.class);
-            mongoTemplate.remove(answer);
+            mongoTemplate.remove(Query.query(Criteria.where("answerId").is(answerId)), Answer.class);
 
             return Response.createBySuccess(null);
         } else {
