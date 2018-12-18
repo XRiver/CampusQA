@@ -139,7 +139,7 @@ public class AnswerController {
                 answerId = (String) params.get("answerId");
 
         User user = userService.findOne(userId);
-        List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("id").is(answerId)), Answer.class);
+        List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("answerId").is(answerId)), Answer.class);
 
         if (answers.isEmpty()) {
             return Response.createByIllegalArgument(null);
@@ -167,7 +167,7 @@ public class AnswerController {
             return Response.createByBan(null);
         }
 
-        List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("id").is(answerId)), Answer.class);
+        List<Answer> answers = mongoTemplate.find(Query.query(Criteria.where("answerId").is(answerId)), Answer.class);
 
         if (answers.isEmpty()) {
             return Response.createByIllegalArgument(null);
