@@ -162,4 +162,19 @@ public class ProblemController {
         return Response.createBySuccess(null);
     }
 
+
+    @GetMapping("/api/problem/search")
+    @ResponseBody
+    public Response search(String key) {
+        Criteria criteria = Criteria.where("title").regex("key");
+        Query query = Query.query(criteria);
+        List<Problem> list = mongoTemplate.find(query, Problem.class);
+
+        for (Problem p : list) {
+            User user = userService.findOne(p.getUserId());
+            p.setUser(user);
+        }
+        return Response.createBySuccess(list);
+    }
+
 }

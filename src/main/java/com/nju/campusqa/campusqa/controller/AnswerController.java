@@ -135,6 +135,7 @@ public class AnswerController {
     @ResponseBody
     @PostMapping("/api/answer/delete")
     public Response<Object> deleteAnswer(@RequestBody Map<String, Object> params) {
+        System.out.println("into /api/answer/delete");
         String userId = (String) params.get("userId"),
                 answerId = (String) params.get("answerId");
 
