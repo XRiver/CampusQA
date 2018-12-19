@@ -147,7 +147,7 @@ public class ProblemController {
         return Response.createBySuccess(null);
     }
 
-    @PostMapping("/xxx/api/problem/delete")
+    @PostMapping("/api/problem/delete")
     @ResponseBody
     public Response delete(@RequestBody Problem param) {
         System.out.println("into /api/problem/delete");

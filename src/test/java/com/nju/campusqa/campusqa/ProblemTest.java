@@ -28,20 +28,4 @@ public class ProblemTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
-    public void testCreate() {
-        Problem problem = new Problem();
-        problem.setTitle("早恋都是怎样被家长发现的？");
-        problem.setContent("如题？");
-        problem.setUserId("5c164bc65b1c7223540c3979");
-        problem.setStatus(1);
-        problemController.create(problem);
-    }
-
-    @Test
-    public void test2() {
-        Query q = Query.query(Criteria.where("_id").is("5c17bba85b1c721140526181"));
-        Answer answers = mongoTemplate.findOne(q, Answer.class);
-        System.out.println(answers.getCreateTime());
-}
 }

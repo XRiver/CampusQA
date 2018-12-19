@@ -55,14 +55,15 @@ public class CommentController {
         return Response.createBySuccess(null);
     }
 
-    @PostMapping("/xxx/api/comment/delete")
+    @PostMapping("/api/comment/delete")
     @ResponseBody
     public Response delete(@RequestBody Comment param) {
 
         if (userService.findOne(param.getUserId()) == null)
             return Response.createByIllegalArgument(null);
 
-        if (!commentService.findOne(param.getProblemId()).getUserId().equals(param.getUserId()))
+        Comment comment = commentService.findOne(param.getCommentId());
+        if (!comment.getUserId().equals(param.getUserId()))
             return Response.createByNeedAuthority(null);
 
         Criteria criteria = Criteria.where("commentId").is(param.getCommentId());
