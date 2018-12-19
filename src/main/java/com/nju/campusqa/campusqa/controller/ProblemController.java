@@ -4,6 +4,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.nju.campusqa.campusqa.Service.ProblemService;
 import com.nju.campusqa.campusqa.Service.UserService;
+import com.nju.campusqa.campusqa.entity.Answer;
 import com.nju.campusqa.campusqa.entity.Problem;
 import com.nju.campusqa.campusqa.entity.User;
 import com.nju.campusqa.campusqa.vo.Response;
@@ -70,12 +71,15 @@ public class ProblemController {
         String userId = (String) params.get("userId");
         System.out.println("into /api/problem/mylist");
 
-        if (userService.findOne(userId) == null)
+        User user = userService.findOne(userId);
+        if (user == null)
             return Response.createByIllegalArgument(null);
 
-        // TODO 判断是不是这个用户
-        List<Problem> list = mongoTemplate.findAll(Problem.class);
-        System.out.println(list);
+        List<Problem> list = mongoTemplate.find(Query.query(Criteria.where("userId").is(userId)), Problem.class);
+        for (Problem p : list) {
+            p.setUser(user);
+        }
+
         return Response.createBySuccess(list);
     }
 
