@@ -3,9 +3,11 @@ package com.nju.campusqa.campusqa.controller;
 import com.mongodb.client.result.UpdateResult;
 import com.nju.campusqa.campusqa.Service.AnswerService;
 import com.nju.campusqa.campusqa.Service.CommentService;
+import com.nju.campusqa.campusqa.Service.ProblemService;
 import com.nju.campusqa.campusqa.Service.UserService;
 import com.nju.campusqa.campusqa.entity.Answer;
 import com.nju.campusqa.campusqa.entity.Comment;
+import com.nju.campusqa.campusqa.entity.Problem;
 import com.nju.campusqa.campusqa.entity.User;
 import com.nju.campusqa.campusqa.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class AnswerController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProblemService problemService;
 
     @Autowired
     private AnswerService answerService;
@@ -73,6 +78,7 @@ public class AnswerController {
 
     class AnswerCommentListTuple {
         private Answer answer;
+        private Problem problem;
         private List<Comment> commentList;
 
         public AnswerCommentListTuple(Answer answer, List<Comment> comments) {
@@ -94,6 +100,14 @@ public class AnswerController {
 
         public void setCommentList(List<Comment> commentList) {
             this.commentList = commentList;
+        }
+
+        public Problem getProblem() {
+            return problem;
+        }
+
+        public void setProblem(Problem problem) {
+            this.problem = problem;
         }
     }
 
@@ -214,7 +228,9 @@ public class AnswerController {
         ArrayList<AnswerCommentListTuple> ret = new ArrayList<>();
 
         for(Answer a:answers) {
-            ret.add(new AnswerCommentListTuple(a,commentService.findByAnswerId(a.getAnswerId())));
+            AnswerCommentListTuple answerCommentListTuple = new AnswerCommentListTuple(a,commentService.findByAnswerId(a.getAnswerId()));
+            answerCommentListTuple.setProblem(problemService.findOne(a.getProblemId()));
+            ret.add(answerCommentListTuple);
         }
         return Response.createBySuccess(ret);
     }
