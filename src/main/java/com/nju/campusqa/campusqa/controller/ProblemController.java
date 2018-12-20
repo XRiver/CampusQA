@@ -170,7 +170,8 @@ public class ProblemController {
     @GetMapping("/api/problem/search")
     @ResponseBody
     public Response search(String key) {
-        Criteria criteria = Criteria.where("title").regex("key");
+        System.out.println(key);
+        Criteria criteria = Criteria.where("title").regex(key);
         Query query = Query.query(criteria);
         List<Problem> list = mongoTemplate.find(query, Problem.class);
 

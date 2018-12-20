@@ -203,6 +203,7 @@ public class AnswerController {
     @ResponseBody
     @PostMapping("/api/activity")
     public Response<List<AnswerCommentListTuple>> getActivity(@RequestBody Map<String, Object> params) {
+        System.out.println("into /api/activity");
         String userId = (String) params.get("userId");
 
         User user = userService.findOne(userId);
